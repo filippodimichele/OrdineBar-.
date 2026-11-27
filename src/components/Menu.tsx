@@ -1,11 +1,19 @@
-
-import menu from "../data/menu";
+import type { Product } from "../types";
 import formatPrice from "../utils/formatPrice";
-import type { OrderItem } from "../types";
+import { useState } from "react";
+import { MorphIcon } from "morphicons/react";
+import { Plus, SquarePen } from "lucide-react";
+import { Trash2, Check } from "lucide";
 
 interface MenuProps {
-    onAdd: (id: number) => void;
-    order: OrderItem[];
+    products: Product[];
+    onAdd: (id: string) => void;
+    onEdit: (product: Product) => void;
+    onDelete: (id: string) => void;
+    order: {
+        productId: string;
+        quantity: number;
+    }[];
 }
 
 const categories = [
@@ -14,11 +22,13 @@ const categories = [
     { id: "dolci", name: "Dolci" },
 ] as const;
 
-function Menu({ onAdd, order }: MenuProps) {
+function Menu({ products, onAdd, onEdit, onDelete, order }: MenuProps) {
+    const [hoveredProductId, setHoveredProductId] = useState<string | null>(null);
+
     return (
         <div className="space-y-8">
             {categories.map((category) => {
-                const products = menu.filter(
+                const filteredProducts = products.filter(
                     (product) => product.category === category.id
                 );
 
@@ -29,7 +39,7 @@ function Menu({ onAdd, order }: MenuProps) {
                         </h2>
 
                         <div className="space-y-3">
-                            {products.map((product) => {
+                            {filteredProducts.map((product) => {
                                 const orderItem = order.find(
                                     (item) => item.productId === product.id
                                 );
@@ -51,14 +61,40 @@ function Menu({ onAdd, order }: MenuProps) {
                                             </p>
                                         </div>
 
-                                        <button
-                                            type="button"
-                                            onClick={() => onAdd(product.id)}
-                                            disabled={quantity >= 5}
-                                            className="rounded-3xl bg-blue-600 px-4 py-2 text-white hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-40"
-                                        >
-                                            Aggiungi
-                                        </button>
+                                        <div className="flex gap-2">
+                                            <button
+                                                type="button"
+                                                onClick={() => onEdit(product)}
+                                                className="flex items-center gap-2 rounded-lg bg-gray-400 px-4 py-2 text-white hover:bg-gray-300"
+                                            >
+                                                <SquarePen size={18} />
+                                                Modifica
+                                            </button>
+
+                                            <button
+                                                type="button"
+                                                onClick={() => onAdd(product.id)}
+                                                disabled={quantity >= 5}
+                                                className="flex items-center gap-2 rounded-lg bg-blue-700 px-4 py-2 text-white hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-40"
+                                            >
+                                                <Plus size={18} />
+                                                Aggiungi nel carrello
+                                            </button>
+
+                                            <button
+                                                type="button"
+                                                onClick={() => onDelete(product.id)}
+                                                onMouseEnter={() => setHoveredProductId(product.id)}
+                                                onMouseLeave={() => setHoveredProductId(null)}
+                                                className="flex items-center gap-2 rounded-lg bg-red-600 px-4 py-2 text-white hover:bg-red-700"
+                                            >
+                                                <MorphIcon
+                                                    icon={hoveredProductId === product.id ? Check : Trash2}
+                                                    size={18}
+                                                />
+                                                Elimina
+                                            </button>
+                                        </div>
                                     </div>
                                 );
                             })}

@@ -1,5 +1,4 @@
-
- // dati raccolti dal modulo di conferma dell'ordine
+// dati raccolti dal modulo di conferma dell'ordine
 export type Checkout = {
     nome: string;
     classe: string;
@@ -8,9 +7,17 @@ export type Checkout = {
     note: string;
 };
 
+// dati dei prodotti del menu
+export type Product = {
+    id: string;
+    name: string;
+    price: number;
+    category: "panini" | "bevande" | "dolci";
+};
+
 // identificativo del prodotto e quantità nel carrello
 export type OrderItem = {
-    productId: number;
+    productId: string;
     quantity: number;
 };
 
@@ -21,8 +28,9 @@ export type ConfirmedOrder = {
     classe: string;
     ritiro: Checkout["ritiro"];
     pagamento: Checkout["pagamento"];
+    note: string;
     products: {
-        productId: number;
+        productId: string;
         name: string;
         price: number;
         quantity: number;

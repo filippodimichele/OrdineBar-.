@@ -4,13 +4,20 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
+    "dev": "concurrently  -n \"REACT,DB\" -c \"\" \" npm run dev:front\" \"npm run dev:back\"",
+    "dev:front": "vite",
+    "dev:back": "json-server db.json",
     "build": "tsc -b && vite build",
     "lint": "oxlint",
     "preview": "vite preview"
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.3.4",
+    "concurrently": "^10.0.7",
+    "json-server": "^1.0.0-beta.15",
+    "lucide": "^1.82.0",
+    "lucide-react": "^1.82.0",
+    "morphicons": "^2.0.2",
     "react": "^19.3.1",
     "react-dom": "^19.3.1",
     "tailwindcss": "^4.3.4"

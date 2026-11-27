@@ -1,15 +1,14 @@
-
-import menu from "../data/menu";
 import formatPrice from "../utils/formatPrice";
-import type { OrderItem } from "../types";
+import type { OrderItem, Product } from "../types";
 
 interface OrderProps {
     order: OrderItem[];
+    products: Product[];
     total: number;
-    onQuantityChange: (id: number, change: number) => void;
+    onQuantityChange: (id: string, change: number) => void;
 }
 
-function Order({ order, total, onQuantityChange }: OrderProps) {
+function Order({ order, products, total, onQuantityChange }: OrderProps) {
     return (
         <section className="space-y-4">
             <h2 className="text-2xl font-bold">Il tuo ordine</h2>
@@ -22,7 +21,7 @@ function Order({ order, total, onQuantityChange }: OrderProps) {
                 <>
                     <div className="space-y-4">
                         {order.map((item) => {
-                            const product = menu.find(
+                            const product = products.find(
                                 (product) => product.id === item.productId
                             );
 
